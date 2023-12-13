@@ -88,9 +88,19 @@ namespace WindowsFormsApp1
 
             APIs.Gui.WithSurface(DisplaySurfaceID.Client, () =>
             {
-                APIs.Gui.DrawEllipse((int)ObjPos.X, (int)Math.Floor(ObjPos.Y + APIs.EmuClient.ScreenHeight() * 0.5f), 5, 5, Color.Red, Color.Black, DisplaySurfaceID.Client);
-            });
+                
 
+                foreach (long addr in EntityAddresses)
+                {
+                    uint entX = APIs.Memory.ReadU32(addr);
+                    uint entY = APIs.Memory.ReadU32(addr + 4);
+                    System.Numerics.Vector2 entPos = new((float)Math.Floor(ScrScale.X * ((float)entX - CamPos.X)), (float)Math.Floor(ScrScale.Y * ((float)entY - CamPos.Y)));
+                    APIs.Gui.DrawEllipse((int)entPos.X, (int)Math.Floor(entPos.Y + APIs.EmuClient.ScreenHeight() * 0.5f), 10, 10, Color.Blue, Color.Black, DisplaySurfaceID.Client);
+
+                }
+                APIs.Gui.DrawEllipse((int)ObjPos.X, (int)Math.Floor(ObjPos.Y + APIs.EmuClient.ScreenHeight() * 0.5f), 10, 10, Color.Red, Color.Black, DisplaySurfaceID.Client);
+
+            });
         }
 
         private void entityList_SelectedIndexChanged(object sender, EventArgs e)
