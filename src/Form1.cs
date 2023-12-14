@@ -17,7 +17,7 @@ using WebSocketSharp;
 
 namespace WindowsFormsApp1
 {
-    [ExternalTool("dqhrs-entity-veiwer")]
+    [ExternalTool("dqhrs-entity-viewer")]
     public partial class Form1 : ToolFormBase, IExternalToolForm
     {
         public IGuiRenderer guiRenderer;
@@ -35,7 +35,7 @@ namespace WindowsFormsApp1
         public Form1() => InitializeComponent();
 
 
-        protected override string WindowTitleStatic => "dqhrs-entity-veiwer";
+        protected override string WindowTitleStatic => "dqhrs-entity-viewer";
 
 
         public override void Restart()
@@ -52,7 +52,7 @@ namespace WindowsFormsApp1
             currentAddress = 0x00143B20;
             entityList.Items.Add("player");
             EntityAddresses.Add(currentAddress);
-            for (long i = 0x00143C3C; i < 0x00143C3C+(100*0x11c); i+=0x11c) {
+            for (long i = 0x00143C3C; i < 0x00143C3C+(80*0x11c); i+=0x11c) {
                 uint xPos = APIs.Memory.ReadU32(i);
                 uint yPos = APIs.Memory.ReadU32(i+4);
                 if (xPos != 0 && yPos != 0) {
