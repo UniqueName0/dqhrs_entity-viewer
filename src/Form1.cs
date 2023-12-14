@@ -52,7 +52,7 @@ namespace WindowsFormsApp1
             currentAddress = 0x00143B20;
             entityList.Items.Add("player");
             EntityAddresses.Add(currentAddress);
-            for (long i = 0x00143C3C; i < 0x00143C3C+(50*0x11c); i+=0x11c) {
+            for (long i = 0x00143C3C; i < 0x00143C3C+(100*0x11c); i+=0x11c) {
                 uint xPos = APIs.Memory.ReadU32(i);
                 uint yPos = APIs.Memory.ReadU32(i+4);
                 if (xPos != 0 && yPos != 0) {
@@ -77,7 +77,8 @@ namespace WindowsFormsApp1
             entityZBox.Value = APIs.Memory.ReadU32(currentAddress + 0x14);
             entityIdBox.Value = APIs.Memory.ReadU8(currentAddress + 0xFa);
 
-            System.Numerics.Vector2 CamPos = new((int)APIs.Memory.ReadU32(0x00143B20) - 33023, (int)APIs.Memory.ReadU32(0x00143B24) - 24831);
+            //System.Numerics.Vector2 CamPos = new((int)APIs.Memory.ReadU32(0x00143B20) - 33023, (int)APIs.Memory.ReadU32(0x00143B24) - 24831);
+            System.Numerics.Vector2 CamPos = new((int)APIs.Memory.ReadU32(0x00140f4c), (int)APIs.Memory.ReadU32(0x00140f50));
             if (CamPos.X < 0) CamPos.X = 0;
             if (CamPos.Y < 0) CamPos.Y = 0;
             
@@ -95,10 +96,10 @@ namespace WindowsFormsApp1
                     uint entX = APIs.Memory.ReadU32(addr);
                     uint entY = APIs.Memory.ReadU32(addr + 4);
                     System.Numerics.Vector2 entPos = new((float)Math.Floor(ScrScale.X * ((float)entX - CamPos.X)), (float)Math.Floor(ScrScale.Y * ((float)entY - CamPos.Y)));
-                    APIs.Gui.DrawEllipse((int)entPos.X, (int)Math.Floor(entPos.Y + APIs.EmuClient.ScreenHeight() * 0.5f), 10, 10, Color.Blue, Color.Black, DisplaySurfaceID.Client);
+                    APIs.Gui.DrawEllipse((int)entPos.X, (int)Math.Floor(entPos.Y + APIs.EmuClient.ScreenHeight() * 0.5f), 10, 10, Color.Black, Color.Blue, DisplaySurfaceID.Client);
 
                 }
-                APIs.Gui.DrawEllipse((int)ObjPos.X, (int)Math.Floor(ObjPos.Y + APIs.EmuClient.ScreenHeight() * 0.5f), 10, 10, Color.Red, Color.Black, DisplaySurfaceID.Client);
+                APIs.Gui.DrawEllipse((int)ObjPos.X, (int)Math.Floor(ObjPos.Y + APIs.EmuClient.ScreenHeight() * 0.5f), 10, 10, Color.Black, Color.Red, DisplaySurfaceID.Client);
 
             });
         }
@@ -133,6 +134,11 @@ namespace WindowsFormsApp1
         private void entityZBox_ValueChanged(object sender, EventArgs e)
         {
             APIs.Memory.WriteU32(currentAddress + 0x14, (uint)entityZBox.Value);
+        }
+
+        private void refresh_click(object sender, EventArgs e)
+        {
+            RoomChanged();
         }
     }
 }
